@@ -1,4 +1,4 @@
-var myVersion = "0.46";
+var myVersion = "0.47";
 
 var http = require ("http");
 var AWS = require ("aws-sdk");
@@ -157,7 +157,25 @@ var s3appPath = "/static.scripting.com/counters/";
 var s3folderpath = s3appPath + myServerName + "/";
 
 
-var server = http.createServer (function (httpRequest, httpResponse) {
+
+
+if (process.env.PORT == undefined) { //it's not Heroku
+	if (process.env.fpServerPort == undefined) {
+		myPort = 5337;
+		}
+	else {
+		myPort = process.env.fpServerPort;
+		}
+	}
+else {
+	myPort = process.env.PORT;
+	flRunningOnHeroku = true;
+	}
+
+consoleLog ("Counter server v" + myVersion + " running on port " + myPort + ".");
+
+
+http.createServer (function (httpRequest, httpResponse) {
 	var parsedUrl = urlpack.parse (httpRequest.url, true);
 	
 	consoleLog (httpRequest.url);
@@ -239,22 +257,7 @@ var server = http.createServer (function (httpRequest, httpResponse) {
 			
 			return
 		}
-	});
+	}).listen (myPort);
 
 
-if (process.env.PORT == undefined) { //it's not Heroku
-	if (process.env.fpServerPort == undefined) {
-		myPort = 5337;
-		}
-	else {
-		myPort = process.env.fpServerPort;
-		}
-	}
-else {
-	myPort = process.env.PORT;
-	flRunningOnHeroku = true;
-	}
 
-consoleLog ("Counter server v" + myVersion + " running on port " + myPort + ".");
-
-server.listen (myPort);
