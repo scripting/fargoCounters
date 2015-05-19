@@ -1,4 +1,4 @@
-var myVersion = "0.47";
+var myVersion = "0.48";
 
 var http = require ("http");
 var AWS = require ("aws-sdk");
@@ -256,6 +256,20 @@ http.createServer (function (httpRequest, httpResponse) {
 				httpResponse.end (s);    
 			
 			return
+		case "/gettodayshits":
+			if (okparam (parsedUrl.query.group)) {
+				var group = cleanName (parsedUrl.query.group);
+				var s3groupPath = s3appPath + group + "/";
+				var s3todayPath = s3groupPath + "today.json";
+				s3getJsonObject (s3todayPath, function (obj) {
+					httpResponse.writeHead (200, {"Content-Type": "application/json"});
+					var s = "getData (" + JSON.stringify (obj) + ")";
+					httpResponse.end (s);    
+					});
+				}
+			
+			return;
+			
 		}
 	}).listen (myPort);
 

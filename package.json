@@ -11,8 +11,7 @@
     "url": "https://github.com/scripting/counters.git"
     },
   "dependencies" : {
-    "aws-sdk": "*", 
-    "request": "*"
+    "aws-sdk": "*"
     }, 
   "license": "MIT",
   "engines": {
